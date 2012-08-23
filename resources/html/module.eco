@@ -62,7 +62,31 @@
                 <% for method in cls.staticmethods: %>
                 <div class="method">
                   <h4><%= method.name %>(<%= method.params.join(', ') %>)</h4>
-                  <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% if method.annotations: %>
+                  <div class="annotations">
+                    <% if method.annotations.PARAM: %>
+                    <h5>Parameters:</h5>
+                    <ul>
+                      <% for descr in method.annotations.PARAM: %>
+                      <li><span class="annotationsParamName">
+                        <%= descr.value.substring(0,descr.value.indexOf(" ")) %>
+                        </span><%= descr.value.substring(descr.value.indexOf(" ")+1) %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                    <% if method.annotations.RETURN: %>
+                    <h5>Returns:</h5>
+                    <ul>
+                      <% for value in method.annotations.RETURN: %>
+                      <li><%= value.value %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                  </div>
+                    <%- method.annotationFreeDocstring([ 'PARAM', 'RETURN']) %>
+                  <% else: %>
+                    <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% end %>
                 </div>
                 <% end %>
               </div>
@@ -73,7 +97,31 @@
                 <% for method in cls.instancemethods: %>
                 <div class="method">
                   <h4><%= method.name %>(<%= method.params.join(', ') %>)</h4>
-                  <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% if method.annotations: %>
+                  <div class="annotations">
+                    <% if method.annotations.PARAM: %>
+                    <h5>Parameters:</h5>
+                    <ul>
+                      <% for descr in method.annotations.PARAM: %>
+                      <li><span class="annotationsParamName">
+                        <%= descr.value.substring(0,descr.value.indexOf(" ")) %>
+                        </span><%= descr.value.substring(descr.value.indexOf(" ")+1) %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                    <% if method.annotations.RETURN: %>
+                    <h5>Returns:</h5>
+                    <ul>
+                      <% for value in method.annotations.RETURN: %>
+                      <li><%= value.value %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                  </div>
+                    <%- method.annotationFreeDocstring([ 'PARAM', 'RETURN']) %>
+                  <% else: %>
+                    <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% end %>
                 </div>
                 <% end %>
               </div>
@@ -84,7 +132,31 @@
                 <% for method in cls.privatemethods: %>
                 <div class="method">
                   <h4><%= method.name %>(<%= method.params.join(', ') %>)</h4>
-                  <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% if method.annotations: %>
+                  <div class="annotations">
+                    <% if method.annotations.PARAM: %>
+                    <h5>Parameters:</h5>
+                    <ul>
+                      <% for descr in method.annotations.PARAM: %>
+                      <li><span class="annotationsParamName">
+                        <%= descr.value.substring(0,descr.value.indexOf(" ")) %>
+                        </span><%= descr.value.substring(descr.value.indexOf(" ")+1) %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                    <% if method.annotations.RETURN: %>
+                    <h5>Returns:</h5>
+                    <ul>
+                      <% for value in method.annotations.RETURN: %>
+                      <li><%= value.value %></li>
+                      <% end %>
+                    </ul>
+                    <% end %>
+                  </div>
+                    <%- method.annotationFreeDocstring([ 'PARAM', 'RETURN']) %>
+                  <% else: %>
+                    <% if method.docstring: %><%- method.docstring %><% end %>
+                  <% end %>
                 </div>
                 <% end %>
               </div>
