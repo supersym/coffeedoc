@@ -95,6 +95,9 @@ class HtmlRenderer extends Renderer
         module = traverse(module).map (value) ->
             if value and this.key == 'docstring'
                 this.update(marked(value))
+            
+            if value and this.key == 'annotationFreeDocstring'
+                this.update(value.bind(null,marked))
 
         basepath = path.relative(path.dirname(module.path), process.cwd())
         module.resourcepath = path.join(basepath, 'resources/')

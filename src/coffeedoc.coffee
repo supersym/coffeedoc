@@ -135,10 +135,73 @@ documentFunction = (func) ->
     else
         params = []
 
+    # parse annotations
+    annotations = null
+    if docstring?
+        lines = first_obj.comment.split("\n")
+        
+        inAnnotation = false
+        indents = 0
+        currentAnnotation = { name: '', value: '', raw: '' }
+        
+        for line in lines
+            if inAnnotation
+                if line.match(new RegExp("^\\s{#{ indents },#{ indents }}\\s+"))
+                    currentAnnotation.value += ' '+line.replace(/^\s+/,'')
+                    currentAnnotation.raw += line+'\n'
+                else
+                    inAnnotation = false
+                    unless annotations?
+                        annotations = {}
+                    unless annotations[currentAnnotation.name]?
+                        annotations[currentAnnotation.name] = []
+                    annotations[currentAnnotation.name].push({value: currentAnnotation.value, rawValue: currentAnnotation.raw })
+            
+            if line.match(/^\s*[@]/)
+                inAnnotation = true
+                indents = 0
+                while line.substring(0,1) isnt '@'
+                    indents++
+                    line = line.substring(1)
+                
+                currentAnnotation.name = line.substring(1,line.indexOf(' '))
+                currentAnnotation.value = line.substring(line.indexOf(' ')+1)
+                currentAnnotation.raw = line+'\n'
+    
     doc = {
         name: getFullName(func.variable)
         docstring: docstring
         params: params
+        annotations: annotations
+        annotationFreeDocstring: (( formatDocstring, rawDocstring, annotations, markedAndFilterAnnotations... ) ->
+            unless rawDocstring?
+                return ''
+            
+            marked = null
+            filterAnnotations = null
+            
+            if typeof(markedAndFilterAnnotations[0]) is 'function'
+                marked = markedAndFilterAnnotations[0]
+                if markedAndFilterAnnotations[1]?
+                    filterAnnotations = markedAndFilterAnnotations[1]
+            else
+                filterAnnotations = markedAndFilterAnnotations[0]
+            
+            unless filterAnnotations?
+                filterAnnotations = []
+                filterAnnotations.push(key) for key of annotations
+            
+            docstring = rawDocstring
+            for annotation in filterAnnotations
+                if annotations[annotation]?
+                    for occurence in annotations[annotation]
+                        docstring = docstring.replace(occurence.rawValue,'')
+            
+            if marked?
+                return marked(formatDocstring(docstring))
+            
+            formatDocstring(docstring)
+        ).bind(null, formatDocstring, first_obj.comment, annotations)
     }
 
 
