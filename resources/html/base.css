@@ -256,6 +256,25 @@ h3 {
 .method {
   margin-bottom: 20px;
 }
+.method div.annotations {
+  background-color: #f5f5f5;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+}
+.method div.annotations h5 {
+  font: bold 14px/21px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.method div.annotations ul {
+  margin-bottom:7px;
+  padding-left:10px;
+}
+.method div.annotations ul li {
+  margin-bottom:2px;
+  line-height:16px;
+}
+.method div.annotations span.annotationsParamName {
+  color:#2D81C5;
+}
 .class .header {
   border-bottom: 1px solid #ccc;
   margin-bottom: 10px;
